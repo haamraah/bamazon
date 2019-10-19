@@ -39,35 +39,30 @@ exe();
 function exe() {
     inquirer.prompt([{
         type: "list",
-        choices: [`see inventory`, `see departments`, `add depatment`, `Quit`],
+        choices: [`see inventory`, `see departments`, `Product Sales by Department`, `add depatment`, `Quit`],
         name: "command"
     }]).then((res) => {
         if (res.command == `add depatment`) {
-            addDepartment();
+            readDb("SELECT * FROM bamazon.departments", addDepartment());
         } else if (res.command == `Quit`) {
             connection ? connection.destroy() : false;
+        } else if (res.command == `Product Sales by Department`) {
+            connection ? connection.destroy() : false;
         } else if (res.command == `see departments`) {
-            showDepartments();
+            readDb("SELECT * FROM bamazon.departments", exe())
         } else if (res.command == `see inventory`) {
-            inventory()
+            readDb("SELECT * FROM bamazon.products", exe())
         }
     });
 }
 
-async function inventory() {
-    await readDb("SELECT * FROM bamazon.products")
-    exe();
-
-}
-
-function readDb(_query) {
-    console.log("read db", _query)
+function readDb(_query, callback) {
     if (isConnected) {
         connection.query(_query, (err, res) => {
             if (err) throw err;
             console.log(`
             
--------------------departments-------------------
+-------------------loading table-------------------
 
 
             `)
@@ -79,6 +74,7 @@ function readDb(_query) {
 
 
             `)
+            callback
             return res
 
         });
@@ -86,11 +82,6 @@ function readDb(_query) {
     }
 }
 
-async function showDepartments() {
-    await readDb("SELECT * FROM bamazon.departments")
-    exe();
-
-}
 
 
 function addDepartment() {
@@ -134,14 +125,14 @@ function addDepartment() {
 
                 } else {
                     console.log("update db");
-                    addToDb(resDepName.depName, resCOH.costOverHead)
+                    addToDb(resDepName.depName, resCOH.costOverHead, exe())
                 }
             });
         }
     });
 };
 
-function addToDb(depName, costOverHead) {
+function addToDb(depName, costOverHead, callback) {
     // console.log(`will add ${depName} and ${costOverHead} to db`)
 
     if (isConnected) {
@@ -162,7 +153,7 @@ function addToDb(depName, costOverHead) {
                 
                 `);
 
-                exe();
+                callback
             }
         );
 
