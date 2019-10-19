@@ -33,7 +33,6 @@ connection.connect((err) => {
     `);
     isConnected = true;
     exe();
-
 });
 
 function exe() {
@@ -58,7 +57,7 @@ function exe() {
 }
 
 
-async function addToInventory() {
+function addToInventory() {
 
     console.log(`
 
@@ -115,15 +114,14 @@ function readDb(_query, logOut, callback) {
 
             `)
             }
+            callback
             return res
 
         });
-        callback // ? callback : false;
+
 
     }
 }
-
-
 
 
 function addProduct() {
@@ -202,7 +200,6 @@ function addToDb(_depID, _productName, _productPrice, _productQuantity) {
 
 
 function updateDb(_productID, _productQuantity) {
-    // console.log(`will add ${depName} and ${costOverHead} to db`)
 
     if (isConnected) {
         console.log(`
@@ -221,6 +218,7 @@ function updateDb(_productID, _productQuantity) {
                 
                 `);
 
+                exe();
             }
         );
 

@@ -56,33 +56,6 @@ function exe() {
     });
 }
 
-function readDb(_query, callback) {
-    if (isConnected) {
-        connection.query(_query, (err, res) => {
-            if (err) throw err;
-            console.log(`
-            
--------------------loading table-------------------
-
-
-            `)
-            console.table(res)
-            console.log(`
-            
-
-
-
-
-            `)
-            callback
-            return res
-
-        });
-
-    }
-}
-
-
 
 function addDepartment() {
     console.log(`
@@ -131,6 +104,31 @@ function addDepartment() {
         }
     });
 };
+function readDb(_query, callback) {
+    if (isConnected) {
+        connection.query(_query, (err, res) => {
+            if (err) throw err;
+            console.log(`
+            
+-------------------loading table-------------------
+
+
+            `)
+            console.table(res)
+            console.log(`
+            
+
+
+
+
+            `)
+            callback
+            return res
+
+        });
+
+    }
+}
 
 function addToDb(depName, costOverHead, callback) {
     // console.log(`will add ${depName} and ${costOverHead} to db`)
