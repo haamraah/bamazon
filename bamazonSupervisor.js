@@ -1,6 +1,7 @@
 var inquirer = require("inquirer");
 var _table = require("table");
 var mysql = require("mysql");
+console.log("connecting to Database ...")
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -23,18 +24,11 @@ connection.connect((err) => {
     
     connected as id ${connection.threadId}
     
-
-
-
-
-
-
-
-
     `);
     isConnected = true;
+    exe();
+
 });
-exe();
 
 function exe() {
     inquirer.prompt([{
@@ -47,11 +41,15 @@ function exe() {
         } else if (res.command == `Quit`) {
             connection ? connection.destroy() : false;
         } else if (res.command == `Product Sales by Department`) {
-            connection ? connection.destroy() : false;
+            readDb(`SELECT department_name ,SUM(product_sales) AS "sales by department",(SUM(product_sales)-departments.over_head_costs) AS "total_profit"
+            FROM bamazon.departments
+            INNER JOIN bamazon.products
+            ON bamazon.departments.department_id = bamazon.products.department_id
+            GROUP BY department_name;`, exe())
         } else if (res.command == `see departments`) {
             readDb("SELECT * FROM bamazon.departments", exe())
         } else if (res.command == `see inventory`) {
-            readDb("SELECT * FROM bamazon.products", exe())
+            readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", exe())
         }
     });
 }

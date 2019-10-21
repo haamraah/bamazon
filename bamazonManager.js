@@ -15,21 +15,13 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 isConnected = false;
-
+console.log("connecting to Database ...")
 connection.connect((err) => {
     if (err) throw err;
     console.log(`
     
     connected as id ${connection.threadId}
     
-
-
-
-
-
-
-
-
     `);
     isConnected = true;
     exe();
@@ -42,16 +34,16 @@ function exe() {
         name: "command"
     }]).then((res) => {
         if (res.command == `Add new product`) {
-            addProduct();
+            readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", true, addProduct())
         } else if (res.command == `Quit`) {
             connection ? connection.destroy() : false;
         } else if (res.command == `View inventory`) {
-            readDb("SELECT * FROM bamazon.products", true, exe())
+            readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", true, exe())
         } else if (res.command == `View Low Inventory`) {
             readDb("SELECT * FROM bamazon.products WHERE stock_quantity <5", true, exe())
         } else if (res.command == `Add to Inventory`) {
             console.log("add to inventory")
-            readDb("SELECT * FROM bamazon.products", true, addToInventory())
+            readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", true, addToInventory())
         }
     });
 }
@@ -160,13 +152,13 @@ function addProduct() {
   
   `);
         } else {
-            addToDb(resProductInfo.departmentId, resProductInfo.productName, resProductInfo.productPrice, resProductInfo.productQuantity);
+            addToDb(resProductInfo.departmentId, resProductInfo.productName, resProductInfo.productPrice, resProductInfo.productQuantity, exe());
         }
     });
 };
 
 
-function addToDb(_depID, _productName, _productPrice, _productQuantity) {
+function addToDb(_depID, _productName, _productPrice, _productQuantity, callback) {
     // console.log(`will add ${depName} and ${costOverHead} to db`)
 
     if (isConnected) {
@@ -189,7 +181,7 @@ function addToDb(_depID, _productName, _productPrice, _productQuantity) {
                 
                 `);
 
-                exe();
+                callback
             }
         );
 
@@ -199,7 +191,7 @@ function addToDb(_depID, _productName, _productPrice, _productQuantity) {
 };
 
 
-function updateDb(_productID, _productQuantity) {
+function updateDb(_productID, _productQuantity, callback) {
 
     if (isConnected) {
         console.log(`
@@ -218,7 +210,7 @@ function updateDb(_productID, _productQuantity) {
                 
                 `);
 
-                exe();
+                callback
             }
         );
 

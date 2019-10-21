@@ -11,7 +11,7 @@ CREATE TABLE products
   department_id INT NOT NULL,
   price DECIMAL(10,2) NULL,
   stock_quantity INT NULL,
-  product_sales INT DEFAULT 0,
+  product_sales DECIMAL(10,2) DEFAULT 0,
   PRIMARY KEY (item_id)
 
 );
