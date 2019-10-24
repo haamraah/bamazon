@@ -69,13 +69,20 @@ The goal was to create an Amazon-like store front using Node.js and MySQL.
 
     * If the manager selects `Quit`, it ends the session and doesn't go back to the menu.
 
-## Demo Videos
+## Demo GIF
 
 * Customer: bamazonClient.js 
 
+    ![Customer Demo](screenShots/customer.gif)
+
 * Manager : bamazonManager.js 
 
-* Supervisor : bamazonSupervisor.js 
+    ![Manager Demo](screenShots/manager.gif)
+
+* Supervisor : bamazonSupervisor.js
+
+    ![Supervisor Demo](screenShots/supervisor.gif)
+
 
 ## Technologies used
 - Node.js
