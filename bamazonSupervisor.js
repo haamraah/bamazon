@@ -33,10 +33,10 @@ connection.connect((err) => {
 function exe() {
     inquirer.prompt([{
         type: "list",
-        choices: [`see inventory`, `see departments`, `Product Sales by Department`, `add depatment`, `Quit`],
+        choices: [`View inventory`, `View departments`, `Product Sales by Department`, `Create New Department`, `Quit`],
         name: "command"
     }]).then((res) => {
-        if (res.command == `add depatment`) {
+        if (res.command == `Create New Department`) {
             readDb("SELECT * FROM bamazon.departments", addDepartment());
         } else if (res.command == `Quit`) {
             connection ? connection.destroy() : false;
@@ -46,9 +46,9 @@ function exe() {
             INNER JOIN bamazon.products
             ON bamazon.departments.department_id = bamazon.products.department_id
             GROUP BY department_name;`, exe())
-        } else if (res.command == `see departments`) {
+        } else if (res.command == `View departments`) {
             readDb("SELECT * FROM bamazon.departments", exe())
-        } else if (res.command == `see inventory`) {
+        } else if (res.command == `View inventory`) {
             readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", exe())
         }
     });

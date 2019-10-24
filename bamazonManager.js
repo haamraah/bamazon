@@ -15,6 +15,8 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 isConnected = false;
+// program runs on connection call back
+
 console.log("connecting to Database ...")
 connection.connect((err) => {
     if (err) throw err;
@@ -26,7 +28,7 @@ connection.connect((err) => {
     isConnected = true;
     exe();
 });
-
+// main prompt function we call this function if error in user input or user selects main menu of after each opration
 function exe() {
     inquirer.prompt([{
         type: "list",
@@ -34,8 +36,11 @@ function exe() {
         name: "command"
     }]).then((res) => {
         if (res.command == `Add new product`) {
+            // readDb (query,log or not log, callback)
             readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", true, addProduct())
         } else if (res.command == `Quit`) {
+            // close the connection before exit
+
             connection ? connection.destroy() : false;
         } else if (res.command == `View inventory`) {
             readDb("SELECT item_id,product_name,department_name,departments.department_id,price,stock_quantity,product_sales FROM bamazon.products  INNER JOIN bamazon.departments ON bamazon.departments.department_id = bamazon.products.department_id", true, exe())
@@ -48,7 +53,7 @@ function exe() {
     });
 }
 
-
+// ask manager the prodct to add to and the quantity to add
 function addToInventory() {
 
     console.log(`
@@ -84,12 +89,14 @@ function addToInventory() {
 
 
 }
-
+// readDb (query,log or not log, callback)
 function readDb(_query, logOut, callback) {
+    // check the status of connection
 
     if (isConnected) {
         connection.query(_query, (err, res) => {
             if (err) throw err;
+            // check if we want to log the result or not
             if (logOut) {
                 console.log(`
             
@@ -106,6 +113,7 @@ function readDb(_query, logOut, callback) {
 
             `)
             }
+            // call the callback only in case of success
             callback
             return res
 
