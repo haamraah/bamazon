@@ -5,6 +5,13 @@ The goal was to create an Amazon-like store front using Node.js and MySQL.
 
 ## Getting Started
 
+### Prerequisites
+
+```
+- Node.js - Download the latest version of Node https://nodejs.org/en/
+- Create a MYSQL database called 'Bamazon', reference schema.sql and seed.sql
+```
+
 - Clone repo.
 - Run command in Terminal or Gitbash 'npm install'
 - Run command depending which mode you would like to be on:
@@ -89,12 +96,6 @@ The goal was to create an Amazon-like store front using Node.js and MySQL.
 - Inquire NPM Package (https://www.npmjs.com/package/inquirer)
 - MYSQL NPM Package (https://www.npmjs.com/package/mysql)
 
-### Prerequisites
-
-```
-- Node.js - Download the latest version of Node https://nodejs.org/en/
-- Create a MYSQL database called 'Bamazon', reference schema.sql and seed.sql
-```
 
 ## Built With
 
